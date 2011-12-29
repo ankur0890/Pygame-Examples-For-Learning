@@ -81,7 +81,7 @@ while 1:
         colorName="Black"
         welcomeScreen=True
     elif pressed[K_s]:
-        pygame.image.save(screen,'image.png')
+        pygame.image.save(background,'image.png')
     elif pressed[K_l]:
         background=pygame.image.load('image.png')
         colorName="Black"
