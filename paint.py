@@ -42,15 +42,16 @@ while 1:
                exit()
            screen.fill((0,0,0))
            screen.blit(welcomeFont.render("Paint Program Example For Learning",True,(0,255,0)),(100,100))
-           screen.blit(colorConfigFont.render("Painting Color Options",True,(0,255,0)),(100,150))
+           screen.blit(colorConfigFont.render("Painting Options",True,(0,255,0)),(100,150))
            screen.blit(colorConfigFont.render("d-Default Color(Black)",True,(0,255,0)),(100,175))
            screen.blit(colorConfigFont.render("b-Blue Color",True,(0,255,0)),(100,200))
            screen.blit(colorConfigFont.render("r-Red Color",True,(0,255,0)),(100,225))
            screen.blit(colorConfigFont.render("y-Yellow Color",True,(0,255,0)),(100,250))
            screen.blit(colorConfigFont.render("g-Green Color",True,(0,255,0)),(100,275))
            screen.blit(colorConfigFont.render("e-Eraser",True,(0,255,0)),(100,300))
-           screen.blit(welcomeFont.render("Press p for painting",True,(0,255,0)),(100,350))
-           screen.blit
+           screen.blit(colorConfigFont.render("s-Save Image",True,(0,255,0)),(100,325))
+           screen.blit(colorConfigFont.render("l-Load Image",True,(0,255,0)),(100,350))
+           screen.blit(welcomeFont.render("Press p for painting",True,(0,255,0)),(100,400))
            pygame.display.flip()
            if mainScreenPressed[K_p]:
                welcomeScreen=False
@@ -79,7 +80,12 @@ while 1:
         color=(0,0,0)
         colorName="Black"
         welcomeScreen=True
-
+    elif pressed[K_s]:
+        pygame.image.save(screen,'image.png')
+    elif pressed[K_l]:
+        background=pygame.image.load('image.png')
+        colorName="Black"
+        color=(0,0,0)
 
 
     for i in pygame.event.get():
@@ -94,9 +100,9 @@ while 1:
     screen.blit(background,(0,0))
     if color==(255,255,255):
      screen.blit(font.render("Eraser In Use",True,(0,0,0)),(400,400))
-     screen.blit(font.render("Press c for color change options",True,(0,0,0)),(100,400))
+     screen.blit(font.render("Press c for painting options",True,(0,0,0)),(100,400))
     else:
-     screen.blit(font.render("Press c for color change options",True,(0,0,0)),(100,400))   
+     screen.blit(font.render("Press c for painting options",True,(0,0,0)),(100,400))   
      screen.blit(font.render("Color In Use : %s"%colorName,True,color),(400,400))
     pygame.display.flip()
 
