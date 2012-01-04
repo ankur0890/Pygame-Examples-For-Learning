@@ -58,7 +58,7 @@ def main():
                 exit()
 
 
-        #checking the collision.check 'pydoc pygame.sprite.spritecollide' for mode details. True is used for sprite killing
+        #checking the collision.check 'pydoc pygame.sprite.spritecollide' for mode details. True is used for sprite killing. It doesn't kill the sprite in actual.It is still present in the computer memory though.It has just removed it from the group so that no further display of that sprite is possible.
         if pygame.sprite.spritecollide(circle,allSprites,True):
             print "collision"
 
