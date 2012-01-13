@@ -76,6 +76,6 @@ if __name__=='__main__':
     main()
                 
 """You can also check the collision about the rect attributes. There are many ways to do that.Example:
-1.circle.rect.collide_rect(box1) will check the collision between the circle and box1 collision
+1.circle.rect.colliderect(box1) will check the collision between the circle and box1 collision
 2. pygame.sprite.collide_rect(sprite1,sprite2) willl also do the same """
 
