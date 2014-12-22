@@ -26,7 +26,8 @@ import random
 import time
 
 pygame.init()
-screen=pygame.display.set_mode((640,480),0,24)
+GAME_WIDTH, GAME_HEIGHT = 640, 480
+screen=pygame.display.set_mode([GAME_WIDTH, GAME_HEIGHT],0,24)
 pygame.display.set_caption("Hit The Stone")
 background=pygame.Surface(screen.get_size())
 background=background.convert()
@@ -108,10 +109,22 @@ def main():
     image=image.convert()
     stoneImage=pygame.image.load('stone.png')
     stoneImage=stoneImage.convert_alpha()
-    bullet=None
     plane=Plane()
     allSprites=pygame.sprite.Group(plane)
+    bullets = pygame.sprite.Group()
+    stones = pygame.sprite.Group()
     clock=pygame.time.Clock()
+
+    def generate_stone():
+        stone = Stone(stoneImage)
+        allSprites.add(stone)
+        stones.add(stone)
+        #if not spawn_area:
+        #    spawn_area = pygame.rect.Rect(0, -50, GAME_WIDTH, 30)
+        #stoneX = random.uniform(spawn_area.left, spawn_area.right)
+        #stoneY = random.uniform(spawn_area.top, spawn_area.bottom)
+
+    generate_stone()
 
     while 1:
         pressed=pygame.key.get_pressed()
@@ -119,17 +132,16 @@ def main():
             if i.type==QUIT or pressed[K_q]:
                 exit()
         if pressed[K_SPACE] and plane.cooldown == 0:
-            bullet=Bullet(plane.rect.centerx,plane.rect.centery,image)
+            bullet = Bullet(plane.rect.centerx,plane.rect.centery,image)
             plane.cooldown=15
             allSprites.add(bullet)
-       # if bullet is not None:
-        #    if bullet.rect.colliderect(stone):
-         #      print 'a'
-#                    bullet.kill()
-                   # stone.kill()
-        #stone=Stone(stoneImage)
-        #allSprites.add(stone)
-#        clock.tick(20) */
+            bullets.add(bullet)
+
+        for bullet in bullets:
+           for stone in stones:
+               if bullet.rect.colliderect(stone):
+                   bullet.kill()
+                   stone.kill()
        
         allSprites.clear(screen,background)
         allSprites.update()
