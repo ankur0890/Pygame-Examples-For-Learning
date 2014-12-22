@@ -51,7 +51,7 @@ class Plane(pygame.sprite.Sprite):
             self.rect.centery+=self.dy
         elif self.pressed[K_UP]:
             self.rect.centery-=self.dy
-        elif self.pressed[K_LEFT]:
+        if self.pressed[K_LEFT]:
             self.rect.centerx-=self.dx
         elif self.pressed[K_RIGHT]:
             self.rect.centerx+=self.dx
