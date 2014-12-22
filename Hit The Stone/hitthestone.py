@@ -36,7 +36,7 @@ class Plane(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image=pygame.image.load('plane.gif').convert()
-        self.timer=15
+        self.cooldown=15
         self.rect=self.image.get_rect()
         self.rect.centerx=random.randint(0,screen.get_width())
         self.distancefromcenter=30
@@ -54,7 +54,6 @@ class Plane(pygame.sprite.Sprite):
             self.rect.centerx-=self.dx
         elif self.pressed[K_RIGHT]:
             self.rect.centerx+=self.dx
-            
 
         if self.rect.bottom>=screen.get_height():
             self.rect.bottom=screen.get_height()
@@ -65,6 +64,8 @@ class Plane(pygame.sprite.Sprite):
             self.rect.centerx=screen.get_width()-self.distancefromcenter
         elif self.rect.centerx<=self.distancefromcenter:
             self.rect.centerx=self.distancefromcenter
+
+        self.cooldown = max(0, self.cooldown-1)
 
 
 class Stone(pygame.sprite.Sprite):
@@ -117,12 +118,10 @@ def main():
         for i in pygame.event.get():
             if i.type==QUIT or pressed[K_q]:
                 exit()
-        if  pressed[K_SPACE]:
-            plane.timer-=1
-            if plane.timer==0:
-                bullet=Bullet(plane.rect.centerx,plane.rect.centery,image)
-                plane.timer=15
-                allSprites.add(bullet)
+        if pressed[K_SPACE] and plane.cooldown == 0:
+            bullet=Bullet(plane.rect.centerx,plane.rect.centery,image)
+            plane.cooldown=15
+            allSprites.add(bullet)
        # if bullet is not None:
         #    if bullet.rect.colliderect(stone):
          #      print 'a'
