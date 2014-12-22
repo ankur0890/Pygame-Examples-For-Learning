@@ -70,13 +70,19 @@ class Plane(pygame.sprite.Sprite):
 
 
 class Stone(pygame.sprite.Sprite):
-    def __init__(self,image):
+    def __init__(self,image=None):
         pygame.sprite.Sprite.__init__(self)
-        self.image=image
+        self.image=image or Stone._load_default_image()
         self.rect=self.image.get_rect()
         self.rect.centerx=random.randint(5,630)
         self.rect.centery=0
         self.dy=5
+
+    _default_image = None
+    def _load_default_image():
+        if not Stone._default_image:
+            Stone._default_image = pygame.image.load('stone.png').convert_alpha()
+        return Stone._default_image
 
     def update(self):
         self.rect.centery+=self.dy
@@ -86,15 +92,21 @@ class Stone(pygame.sprite.Sprite):
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self,posx,posy,image):
+
+    def __init__(self,posx,posy,image=None):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image=image
+        self.image = image or Bullet._load_default_image()
         self.rect=self.image.get_rect()        
         self.rect.center=(posx,posy-30)
         self.dy=5
         
 
+    _default_image = None
+    def _load_default_image():
+        if not Bullet._default_image:
+            Bullet._default_image = pygame.image.load('geometrybullet.png').convert()
+        return Bullet._default_image
 
     def update(self):
         self.rect.centery-=self.dy
@@ -105,50 +117,52 @@ class Bullet(pygame.sprite.Sprite):
        
 
 def main():
-    image=pygame.image.load('geometrybullet.png')
-    image=image.convert()
-    stoneImage=pygame.image.load('stone.png')
-    stoneImage=stoneImage.convert_alpha()
     plane=Plane()
     allSprites=pygame.sprite.Group(plane)
     bullets = pygame.sprite.Group()
     stones = pygame.sprite.Group()
     clock=pygame.time.Clock()
 
+    max_stones = 10;
+    stone_spawn_delay = 100;
+    stone_spawn_cooldown = 0;
+
     def generate_stone():
-        stone = Stone(stoneImage)
+        stone = Stone()
         allSprites.add(stone)
         stones.add(stone)
-        #if not spawn_area:
-        #    spawn_area = pygame.rect.Rect(0, -50, GAME_WIDTH, 30)
-        #stoneX = random.uniform(spawn_area.left, spawn_area.right)
-        #stoneY = random.uniform(spawn_area.top, spawn_area.bottom)
 
-    generate_stone()
-
-    while 1:
+    while True:
         pressed=pygame.key.get_pressed()
         for i in pygame.event.get():
             if i.type==QUIT or pressed[K_q]:
                 exit()
         if pressed[K_SPACE] and plane.cooldown == 0:
-            bullet = Bullet(plane.rect.centerx,plane.rect.centery,image)
+            bullet = Bullet(plane.rect.centerx,plane.rect.centery)
             plane.cooldown=15
             allSprites.add(bullet)
             bullets.add(bullet)
 
-        for bullet in bullets:
-           for stone in stones:
+        for stone in stones:
+            for bullet in bullets:
                if bullet.rect.colliderect(stone):
                    bullet.kill()
                    stone.kill()
+            if stone.rect.colliderect(plane):
+                plane.kill()
+                stone.kill()
+
+        stone_spawn_cooldown -= 1
+        if len(stones) < max_stones and stone_spawn_cooldown <= 0:
+            generate_stone()
+            stone_spawn_cooldown = stone_spawn_delay
        
-        allSprites.clear(screen,background)
+        allSprites.clear(screen, background)
         allSprites.update()
         allSprites.draw(screen)
 
-#         clock.tick(60)
         pygame.display.flip()
+        clock.tick(60)
 
 
 if __name__=='__main__':
