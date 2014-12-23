@@ -42,8 +42,8 @@ class Plane(pygame.sprite.Sprite):
         self.rect.centerx=random.randint(0,screen.get_width())
         self.distancefromcenter=30
         self.rect.centery=screen.get_height()-self.distancefromcenter
-        self.dx=2
-        self.dy=2
+        self.dx=3
+        self.dy=3
 
     def update(self):
         self.pressed=pygame.key.get_pressed()
