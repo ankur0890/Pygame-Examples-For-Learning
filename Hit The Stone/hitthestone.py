@@ -26,8 +26,7 @@ import random
 import time
 
 pygame.init()
-GAME_WIDTH, GAME_HEIGHT = 640, 480
-screen=pygame.display.set_mode([GAME_WIDTH, GAME_HEIGHT],0,24)
+screen=pygame.display.set_mode([640, 480],0,24)
 pygame.display.set_caption("Hit The Stone")
 background=pygame.Surface(screen.get_size())
 background=background.convert()
@@ -151,7 +150,7 @@ def main():
             if i.type==QUIT or pressed[K_q]:
                 exit()
         if pressed[K_SPACE] and plane.cooldown == 0:
-            Bullet(plane.rect.centerx,plane.rect.centery)  # added to bullets group from within constructor
+            Bullet(plane.rect.centerx,plane.rect.centery) 
             plane.cooldown=15
 
         for stone in stones:
