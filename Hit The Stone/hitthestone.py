@@ -34,9 +34,9 @@ background=background.convert()
 screen.blit(background,(0,0))
 
 class Plane(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image=pygame.image.load('plane.gif').convert()
+    def __init__(self, image=None):
+        pygame.sprite.Sprite.__init__(self, self.containers)
+        self.image = image or Plane._default_image
         self.cooldown=15
         self.rect=self.image.get_rect()
         self.rect.centerx=random.randint(0,screen.get_width())
@@ -70,19 +70,13 @@ class Plane(pygame.sprite.Sprite):
 
 
 class Stone(pygame.sprite.Sprite):
-    def __init__(self,image=None):
-        pygame.sprite.Sprite.__init__(self)
-        self.image=image or Stone._load_default_image()
+    def __init__(self, image=None):
+        pygame.sprite.Sprite.__init__(self, self.containers)
+        self.image=image or Stone._default_image
         self.rect=self.image.get_rect()
         self.rect.centerx=random.randint(5,630)
         self.rect.centery=0
         self.dy=5
-
-    _default_image = None
-    def _load_default_image():
-        if not Stone._default_image:
-            Stone._default_image = pygame.image.load('stone.png').convert_alpha()
-        return Stone._default_image
 
     def update(self):
         self.rect.centery+=self.dy
@@ -93,20 +87,14 @@ class Stone(pygame.sprite.Sprite):
 
 class Bullet(pygame.sprite.Sprite):
 
-    def __init__(self,posx,posy,image=None):
-        pygame.sprite.Sprite.__init__(self)
+    def __init__(self, posx, posy, image=None):
+        pygame.sprite.Sprite.__init__(self, self.containers)
 
-        self.image = image or Bullet._load_default_image()
+        self.image = image or Bullet._default_image
         self.rect=self.image.get_rect()        
         self.rect.center=(posx,posy-30)
         self.dy=5
         
-
-    _default_image = None
-    def _load_default_image():
-        if not Bullet._default_image:
-            Bullet._default_image = pygame.image.load('geometrybullet.png').convert()
-        return Bullet._default_image
 
     def update(self):
         self.rect.centery-=self.dy
@@ -117,14 +105,23 @@ class Bullet(pygame.sprite.Sprite):
        
 
 def main():
-    plane=Plane()
-    allSprites=pygame.sprite.Group(plane)
+    allSprites=pygame.sprite.Group()
     bullets = pygame.sprite.Group()
     stones = pygame.sprite.Group()
+
+    Plane.containers = allSprites
+    Stone.containers = allSprites, stones
+    Bullet.containers = allSprites, bullets
+
+    Plane._default_image = pygame.image.load('plane.gif').convert()
+    Bullet._default_image = pygame.image.load('geometrybullet.png').convert()
+    Stone._default_image = pygame.image.load('stone.png').convert_alpha()
+    plane=Plane()
+
     clock=pygame.time.Clock()
 
     max_stones = 10;
-    stone_spawn_delay = 100;
+    stone_spawn_delay = 40;
     stone_spawn_cooldown = 0;
 
     def generate_stone():
