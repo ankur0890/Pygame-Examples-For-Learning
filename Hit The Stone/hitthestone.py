@@ -102,6 +102,22 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.top<=0:
             self.kill()
 
+class Score(pygame.sprite.Sprite):
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.font = pygame.font.Font(None, 20)
+        self.font.set_italic(1)
+        self.color = Color('white')
+        self.lastscore = -1
+        self.update()
+        self.rect = self.image.get_rect().move(10, 450)
+
+    def update(self):
+        if SCORE != self.lastscore:
+            self.lastscore = SCORE
+            msg = 'SCORE: {}'.format(SCORE)
+            self.image = self.font.render(msg, 0, self.color)
        
 
 def main():
@@ -116,7 +132,6 @@ def main():
     Plane._default_image = pygame.image.load('plane.gif').convert()
     Bullet._default_image = pygame.image.load('geometrybullet.png').convert()
     Stone._default_image = pygame.image.load('stone.png').convert_alpha()
-    plane=Plane()
 
     clock=pygame.time.Clock()
 
@@ -124,10 +139,16 @@ def main():
     stone_spawn_delay = 40;
     stone_spawn_cooldown = 0;
 
+    global SCORE
+    SCORE = 0
+    allSprites.add(Score())
+
     def generate_stone():
         stone = Stone()
         allSprites.add(stone)
         stones.add(stone)
+
+    plane=Plane()
 
     while True:
         pressed=pygame.key.get_pressed()
@@ -145,6 +166,7 @@ def main():
                if bullet.rect.colliderect(stone):
                    bullet.kill()
                    stone.kill()
+                   SCORE += 500
             if stone.rect.colliderect(plane):
                 plane.kill()
                 stone.kill()
