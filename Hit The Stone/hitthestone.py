@@ -143,11 +143,6 @@ def main():
     SCORE = 0
     allSprites.add(Score())
 
-    def generate_stone():
-        stone = Stone()
-        allSprites.add(stone)
-        stones.add(stone)
-
     plane=Plane()
 
     while True:
@@ -156,10 +151,8 @@ def main():
             if i.type==QUIT or pressed[K_q]:
                 exit()
         if pressed[K_SPACE] and plane.cooldown == 0:
-            bullet = Bullet(plane.rect.centerx,plane.rect.centery)
+            Bullet(plane.rect.centerx,plane.rect.centery)  # added to bullets group from within constructor
             plane.cooldown=15
-            allSprites.add(bullet)
-            bullets.add(bullet)
 
         for stone in stones:
             for bullet in bullets:
@@ -173,7 +166,7 @@ def main():
 
         stone_spawn_cooldown -= 1
         if len(stones) < max_stones and stone_spawn_cooldown <= 0:
-            generate_stone()
+            Stone()
             stone_spawn_cooldown = stone_spawn_delay
        
         allSprites.clear(screen, background)
