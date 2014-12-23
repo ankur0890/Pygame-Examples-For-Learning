@@ -39,9 +39,9 @@ class Plane(pygame.sprite.Sprite):
         self.image = image or Plane._default_image
         self.cooldown=15
         self.rect=self.image.get_rect()
-        self.rect.centerx=random.randint(0,screen.get_width())
+        self.rect.centerx = screen.get_width() / 2
         self.distancefromcenter=30
-        self.rect.centery=screen.get_height()-self.distancefromcenter
+        self.rect.centery=screen.get_height()-self.distancefromcenter-40
         self.dx=3
         self.dy=3
 
