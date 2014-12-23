@@ -76,7 +76,7 @@ class Stone(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         self.rect.centerx=random.randint(5,630)
         self.rect.centery=0
-        self.dy=5
+        self.dy=4
 
     def update(self):
         self.rect.centery+=self.dy
