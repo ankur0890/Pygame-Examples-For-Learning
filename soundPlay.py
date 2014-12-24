@@ -20,7 +20,7 @@ pygame.mixer.init() #mixer module Intialization
 def main():
   screen=pygame.display.set_mode((640,480),0,24)
   pygame.display.set_caption('Sound Testing')
-  sound=pygame.mixer.Sound('yikes.ogg') #creating an audio object
+  sound=pygame.mixer.Sound('yikes.wav') #creating an audio object
   font=pygame.font.SysFont('arial',30)
   soundFont=font.render("Press Space To Hear A Sound",True,(0,255,0)) 
   while 1:
